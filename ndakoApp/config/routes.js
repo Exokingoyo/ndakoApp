@@ -32,6 +32,24 @@ module.exports.routes = {
   * not match any of those, it is matched against static assets.             *
   *                                                                          *
   ***************************************************************************/
+  'POST /api/v1/auth': { controller: 'AuthController', action: 'signup' },
+  'POST  /api/v1/auth/login': { controller: 'AuthController', action: 'login' },
+  'POST  /api/v1/auth/change-password': { controller: 'AuthController', action: 'changePassword' },
+  'POST /api/v1/auth/logout': { controller: 'AuthController', action: 'logout' },
+
+
+  // Immeuble 
+  'POST /api/v1/immeuble': { controller: 'ImmeubleController', action: 'create' },
+  'PUT /api/v1/immeuble': { controller: 'ImmeubleController', action: 'update' },
+  'GET /api/v1/immeuble': { controller: 'ImmeubleController', action: 'getMyImmeubles' },
+
+
+  // Location
+  'POST /api/v1/location': { controller: 'LocationController', action: 'create' },
+  'PUT /api/v1/location': { controller: 'LocationController', action: 'update' },
+  'GET /api/v1/location': { controller: 'LocationController', action: 'getMylocation' },
+
+
 
 
 };

@@ -16,6 +16,9 @@
 module.exports.models = {
 
 
+  primaryKey: 'id',
+
+
   /***************************************************************************
   *                                                                          *
   * Whether model methods like `.create()` and `.update()` should ignore     *
@@ -53,7 +56,7 @@ module.exports.models = {
   *                                                                          *
   ***************************************************************************/
 
-  // migrate: 'alter',
+  migrate: 'safe',
 
 
   /***************************************************************************
@@ -69,9 +72,9 @@ module.exports.models = {
   ***************************************************************************/
 
   attributes: {
-    createdAt: { type: 'number', autoCreatedAt: true, },
-    updatedAt: { type: 'number', autoUpdatedAt: true, },
-    id: { type: 'number', autoIncrement: true, },
+    id: { type: 'string', columnName: '_id' },
+    createdAt: { type: 'ref', columnType: 'datetime', autoCreatedAt: true, },
+    updatedAt: { type: 'ref', columnType: 'datetime', autoUpdatedAt: true, },
     //--------------------------------------------------------------------------
     //  /\   Using MongoDB?
     //  ||   Replace `id` above with this instead:
@@ -104,6 +107,7 @@ module.exports.models = {
     default: 'Yy6/lMUZKPSgCd0eekuKdLjZyQ4ZX1kPfqtI49bUPgo='
   },
 
+  datastore: 'default',
 
   /***************************************************************************
   *                                                                          *
@@ -118,7 +122,27 @@ module.exports.models = {
   *                                                                          *
   ***************************************************************************/
 
-  cascadeOnDestroy: true
+  cascadeOnDestroy: true,
 
+  // Paramètres MongoDB
+  schema: true,
+  dontUseObjectIds: false,
+
+  useTimestamps: true,
+
+
+  updateOrCreate: async function (criteria, values) {
+    var self = this; // reference for use by callbacks
+    // If no values were specified, use criteria
+    if (!values) values = criteria.where ? criteria.where : criteria;
+
+    return await this.findOne(criteria).then(async function (result) {
+      if (result) {
+        return await self.updateOne(criteria).set(values);
+      } else {
+        return await self.create(values).fetch();
+      }
+    });
+  },
 
 };

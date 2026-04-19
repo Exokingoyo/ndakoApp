@@ -36,4 +36,20 @@ module.exports.session = {
   //   return !!req.path.match(req._sails.LOOKS_LIKE_ASSET_RX);
   // },
 
+  // Durée de vie de la session très longue (7 jours)
+  cookie: {
+    maxAge: 7 * 24 * 60 * 60 * 1000  // 7 jours en millisecondes
+  },
+
+  // Désactiver la réinitialisation de la session
+  rolling: true,
+
+  // Garder la session active même sans activité
+  resave: true,
+  saveUninitialized: true,
+
+  // Optionnel : configuration Redis si vous l'utilisez
+  adapter: '@sailshq/connect-redis',
+  url: process.env.REDIS_URL || 'redis://localhost:6379'
+
 };
