@@ -41,8 +41,10 @@ module.exports = {
     update: async (req, res) => {
         try {
             const { name, address, city, province, country, type, description } = req.body
-            const id = req.params.id || req.query.id
-
+            // const id = req.params.id || req.query.id
+            
+            sails.log.debug('ID de l\'immeuble à mettre à jour:', req.params.id);
+            return
             const immeuble = await ImmeubleService.update(id, { name, address, city, province, country, type, description });
 
             return res.ok({

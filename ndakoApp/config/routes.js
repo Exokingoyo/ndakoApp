@@ -40,7 +40,7 @@ module.exports.routes = {
 
   // Immeuble 
   'POST /api/v1/immeuble': { controller: 'ImmeubleController', action: 'create' },
-  'PUT /api/v1/immeuble': { controller: 'ImmeubleController', action: 'update' },
+  'PUT /api/v1/immeuble/:id': { controller: 'ImmeubleController', action: 'update' },
   'GET /api/v1/immeuble': { controller: 'ImmeubleController', action: 'getMyImmeubles' },
 
 

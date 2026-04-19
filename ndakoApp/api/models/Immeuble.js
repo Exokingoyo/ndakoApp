@@ -73,6 +73,42 @@ module.exports = {
       defaultsTo: []
     },
 
+    has_parking: {
+      type: 'boolean',
+      defaultsTo: false,
+      description: 'Possédant un parking'
+    },
+
+    has_pool: {
+      type: 'boolean',
+      defaultsTo: false,
+      description: 'Possédant une piscine'
+    },
+
+    has_garden: {
+      type: 'boolean',
+      defaultsTo: false,
+      description: 'Possédant un jardin'
+    },
+
+    water_available: {
+      type: 'boolean',
+      defaultsTo: true,
+      description: 'Disponibilité de l\'eau'
+    },
+
+    electricity_available: {
+      type: 'boolean',
+      defaultsTo: true,
+      description: 'Disponibilité de l\'électricité'
+    },
+
+    total_units: {
+      type: 'number',
+      defaultsTo: 1,
+      description: 'Nombre total d\'unités/appartements'
+    },
+
     user: {
       model: 'user',
       required: true,
@@ -81,6 +117,11 @@ module.exports = {
 
     locations: {
       collection: 'location',
+      via: 'immeuble'
+    },
+    
+    appartements: {
+      collection: 'appartement',
       via: 'immeuble'
     },
 

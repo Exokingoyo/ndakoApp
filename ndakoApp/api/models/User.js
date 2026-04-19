@@ -115,6 +115,30 @@ module.exports = {
       collection: 'payement',
       via: 'user'
     },
+      reviews: {
+      collection: 'review',
+      via: 'user'
+    },
+
+    incidents: {
+      collection: 'incident',
+      via: 'user'
+    },
+
+    notifications: {
+      collection: 'notification',
+      via: 'user'
+    },
+
+    sent_messages: {
+      collection: 'message',
+      via: 'sender'
+    },
+
+    received_messages: {
+      collection: 'message',
+      via: 'receiver'
+    },
 
 
 
