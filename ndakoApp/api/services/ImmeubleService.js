@@ -36,18 +36,13 @@ module.exports = {
         }
     },
 
-    findByCriteria: async function (page, limit, user, name, address, city, province, country, type, description, status) {
+    findByCriteria: async function (page, limit, user, name, address, city, province, country, type, description, status, has_parking, has_pool, has_garden, water_available, electricity_available, total_units) {
         try {
             // forcer la conversion en int 
             page = parseInt(page)
             limit = parseInt(limit)
 
-            // Validation des parametres
-            if (!user) {
-                throw new Error('ID de l\'user requis');
-            }
-            
-            return await ImmeubleRepo.findByCriteria(page, limit, user, name, address, city, province, country, type, description, status);
+            return await ImmeubleRepo.findByCriteria(page, limit, user, name, address, city, province, country, type, description, status, has_parking, has_pool, has_garden, water_available, electricity_available, total_units);
         } catch (error) {
             throw error;
         }

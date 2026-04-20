@@ -41,7 +41,6 @@ module.exports = {
       maxLength: 50,
       defaultsTo: 'RDC',
       description: 'Pays de L\'immeuble'
-
     },
 
     type: {
@@ -63,10 +62,10 @@ module.exports = {
       description: 'Status de L\'immeuble'
     },
 
-    is_active: {
-      type: 'boolean',
-      defaultsTo: true
-    },
+    // is_active: {
+    //   type: 'boolean',
+    //   defaultsTo: true
+    // },
 
     image_urls: {
       type: 'json',
@@ -103,11 +102,11 @@ module.exports = {
       description: 'Disponibilité de l\'électricité'
     },
 
-    total_units: {
-      type: 'number',
-      defaultsTo: 1,
-      description: 'Nombre total d\'unités/appartements'
-    },
+    // total_units: {
+    //   type: 'number',
+    //   defaultsTo: 1,
+    //   description: 'Nombre total d\'unités/appartements'
+    // },
 
     user: {
       model: 'user',
@@ -119,7 +118,7 @@ module.exports = {
       collection: 'location',
       via: 'immeuble'
     },
-    
+
     appartements: {
       collection: 'appartement',
       via: 'immeuble'
