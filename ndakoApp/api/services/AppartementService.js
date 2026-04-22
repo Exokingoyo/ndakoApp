@@ -1,5 +1,7 @@
+const Sails = require("sails/lib/app/Sails");
 const AppartementRepo = require("../repositories/AppartementRepo");
 const ImmeubleRepo = require("../repositories/ImmeubleRepo");
+const sailsHookGrunt = require("sails-hook-grunt");
 
 module.exports = {
 
@@ -34,14 +36,8 @@ module.exports = {
             }
 
             return await AppartementRepo.create({
-                name: data.name,
-                etage: data.etage,
-                loyer: data.loyer,
-                surface_area: data.surface_area,
-                chambre: data.chambre,
-                bathrooms: data.bathrooms,
                 immeuble: data.immeubleId,
-                description: data.description,
+                ...data
             });
         } catch (error) {
             throw error;
@@ -50,7 +46,24 @@ module.exports = {
 
     update: async function (id, data) {
         try {
-            return await AppartementRepo.update(id, data);
+            const immeuble = await ImmeubleRepo.findById(data.immeubleId)
+
+            if (!immeuble) {
+                throw ({ message: 'l\'immeuble n\'exite pas.' });
+            }
+            if (immeuble.status !== 'active') {
+                throw ({ message: 'l\'immeuble n\'est pas active.' });
+            }
+            const appartement = await this.findById(id);
+
+            if (!appartement) {
+                throw ({ message: 'l\'appartement n\'exite pas ' });
+            }
+
+            return await AppartementRepo.update(id, {
+                ...data,
+                immeuble: data.immeubleId,
+            });
         } catch (error) {
             throw error;
         }
@@ -64,9 +77,9 @@ module.exports = {
         }
     },
 
-    findByCriteria: async function (criteria) {
+    findByCriteria: async function (page, limit, userId, immeubleId, name, loyerStart, loyerEnd, etage, chambreMin, ChambreMax, bathroomsMin, bathroomsMax, surface_areaMin, surface_areaMax, is_vacant, description, status) {
         try {
-            return await AppartementRepo.findByCriteria(criteria);
+            return await AppartementRepo.findByCriteria(page, limit, userId, immeubleId, name, loyerStart, loyerEnd, etage, chambreMin, ChambreMax, bathroomsMin, bathroomsMax, surface_areaMin, surface_areaMax, is_vacant, description, status);
         } catch (error) {
             throw error;
         }
@@ -75,6 +88,14 @@ module.exports = {
     findById: async function (id) {
         try {
             return await AppartementRepo.findById(id);
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    findByImmeuble: async function (immeubleId) {
+        try {
+            return await AppartementRepo.findByImmeuble(immeubleId);
         } catch (error) {
             throw error;
         }

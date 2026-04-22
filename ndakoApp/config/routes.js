@@ -52,6 +52,10 @@ module.exports.routes = {
 
   // Appartements
   'POST /api/v1/appartement': { controller: 'AppartementController', action: 'create' },
+  'PUT /api/v1/appartement': { controller: 'AppartementController', action: 'update' },
+  'GET /api/v1/appartements': { controller: 'AppartementController', action: 'getAllAppartements' },
+  'GET /api/v1/me/appartements': { controller: 'AppartementController', action: 'getMyAppartements' },
+
 
 
   // Rechercher
