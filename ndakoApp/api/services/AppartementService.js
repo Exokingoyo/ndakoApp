@@ -46,14 +46,17 @@ module.exports = {
 
     update: async function (id, data) {
         try {
-            const immeuble = await ImmeubleRepo.findById(data.immeubleId)
+            if (data.immeubleId) {
+                const immeuble = await ImmeubleRepo.findById(data.immeubleId)
 
-            if (!immeuble) {
-                throw ({ message: 'l\'immeuble n\'exite pas.' });
+                if (!immeuble) {
+                    throw ({ message: 'l\'immeuble n\'exite pas.' });
+                }
+                if (immeuble.status !== 'active') {
+                    throw ({ message: 'l\'immeuble n\'est pas active.' });
+                }
             }
-            if (immeuble.status !== 'active') {
-                throw ({ message: 'l\'immeuble n\'est pas active.' });
-            }
+
             const appartement = await this.findById(id);
 
             if (!appartement) {
