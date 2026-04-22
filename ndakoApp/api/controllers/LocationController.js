@@ -14,9 +14,9 @@ module.exports = {
     */
     create: async (req, res) => {
         try {
-            const { user, appartement, loyer, caution, dateStart } = req.body
+            const { userId, appartementId, caution, dateStart } = req.body
 
-            const location = await LocationService.create(user, appartement, loyer, caution, dateStart);
+            const location = await LocationService.create({ userId, appartementId, caution, dateStart });
 
             return res.ok({
                 status: 'success',
@@ -37,10 +37,10 @@ module.exports = {
     */
     update: async (req, res) => {
         try {
-            const { user, immeuble, loyer, caution, dateStart } = req.body
+            const { userId, appartement, caution, dateStart } = req.body
             const id = req.params.id || req.query.id
 
-            sails.log("id",id,"data",{ user, immeuble, loyer, caution, dateStart })
+            sails.log("id", id, "data", { user, immeuble, loyer, caution, dateStart })
 
             const location = await LocationService.update(id, { user, immeuble, loyer, caution, dateStart });
 

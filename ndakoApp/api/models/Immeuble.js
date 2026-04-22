@@ -114,10 +114,10 @@ module.exports = {
       description: 'Utilisateur Proprietaire (Bailleur)'
     },
 
-    locations: {
-      collection: 'location',
-      via: 'immeuble'
-    },
+    // locations: {
+    //   collection: 'location',
+    //   via: 'immeuble'
+    // },
 
     appartements: {
       collection: 'appartement',

@@ -45,10 +45,10 @@ module.exports = {
       description: 'Utilisateur Locateur'
     },
 
-    immeuble: {
-      model: 'immeuble',
-      required: true,
-    },
+    // immeuble: {
+    //   model: 'immeuble',
+    //   required: true,
+    // },
 
     payements: {
       collection: 'payement',
