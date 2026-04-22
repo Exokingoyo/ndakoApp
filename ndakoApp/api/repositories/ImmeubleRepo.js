@@ -33,14 +33,15 @@ module.exports = {
         }
     },
 
-    findByCriteria: async function (page, limit, user, name, address, city, province, country, type, description, status) {
+    findByCriteria: async function (page, limit, user, name, address, city, province, country, type, description, status, has_parking, has_pool, has_garden, water_available, electricity_available, total_units) {
         try {
 
             const whereClause = {
                 or: [
                     {
-                        user: user,
+
                         //le spread operator + condition ternaire
+                        ...(user ? { user } : {}),
                         ...(name ? { name } : {}),
                         ...(address ? { address } : {}),
                         ...(city ? { city } : {}),
@@ -49,6 +50,12 @@ module.exports = {
                         ...(type ? { type } : {}),
                         ...(status ? { status } : {}),
                         ...(description ? { description } : {}),
+                        ...(has_parking ? { has_parking } : {}),
+                        ...(has_pool ? { has_pool } : {}),
+                        ...(has_garden ? { has_garden } : {}),
+                        ...(water_available ? { water_available } : {}),
+                        ...(electricity_available ? { electricity_available } : {}),
+                        ...(total_units ? { total_units } : {}),
 
                     }
                 ]
@@ -63,7 +70,7 @@ module.exports = {
                 skip: (page - 1) * limit,
                 limit: limit
 
-            }).populate('user').sort('createdAt DESC');
+            }).populate('user').populate('appartements').populate('locations').sort('createdAt DESC');
 
             return {
                 immeubles,
@@ -80,6 +87,14 @@ module.exports = {
     findById: async function (id) {
         try {
             return await Immeuble.findOne(id).populate('user');
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    find: async function (id) {
+        try {
+            return await Immeuble.find(id).populate('user').populate('appartements').populate('locations');
         } catch (error) {
             throw error;
         }

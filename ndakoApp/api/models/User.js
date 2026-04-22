@@ -115,7 +115,8 @@ module.exports = {
       collection: 'payement',
       via: 'user'
     },
-      reviews: {
+
+    reviews: {
       collection: 'review',
       via: 'user'
     },
