@@ -50,6 +50,13 @@ module.exports.routes = {
   'PUT /api/v1/location': { controller: 'LocationController', action: 'update' },
   'GET /api/v1/location': { controller: 'LocationController', action: 'getMylocation' },
 
+  // Appartements
+  'POST /api/v1/appartement': { controller: 'AppartementController', action: 'create' },
+  'PUT /api/v1/appartement': { controller: 'AppartementController', action: 'update' },
+  'GET /api/v1/appartements': { controller: 'AppartementController', action: 'getAllAppartements' },
+  'GET /api/v1/me/appartements': { controller: 'AppartementController', action: 'getMyAppartements' },
+  'GET /api/v1/appartements/:immeubleId': { controller: 'AppartementController', action: 'getByImmeuble' },
+
 
   // Rechercher
   'GET /api/v1/search': { controller: 'SearchController', action: 'search' },

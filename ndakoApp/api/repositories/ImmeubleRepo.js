@@ -92,6 +92,14 @@ module.exports = {
         }
     },
 
+    find: async function (id) {
+        try {
+            return await Immeuble.find(id).populate('user').populate('appartements').populate('locations');
+        } catch (error) {
+            throw error;
+        }
+    },
+
 
 
 }
