@@ -1,4 +1,5 @@
 const LocationRepo = require("../repositories/LocationRepo");
+const AppartementRepo = require("../repositories/AppartementRepo");
 
 module.exports = {
 
@@ -10,9 +11,13 @@ module.exports = {
         }
     },
 
-    create: async function (user, immeuble, loyer, caution, dateStart) {
+    create: async function (user, appartement, loyer, caution, dateStart) {
         try {
-            return await LocationRepo.create({ user, immeuble, loyer, caution, dateStart });
+            const app = await AppartementRepo.findById(appartement);
+            // const immeuble =
+            sails.log(app)
+            return
+            return await LocationRepo.create({ user, appartement, loyer, caution, dateStart });
         } catch (error) {
             throw error;
         }

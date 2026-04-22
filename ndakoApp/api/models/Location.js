@@ -54,10 +54,11 @@ module.exports = {
       collection: 'payement',
       via: 'location',
     },
-    
+
     appartement: {
       model: 'appartement',
-      description: 'L\'unité spécifique louée'
+      description: 'L\'unité spécifique louée',
+      required: true,
     },
 
   },

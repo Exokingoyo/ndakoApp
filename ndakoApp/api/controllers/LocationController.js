@@ -14,14 +14,9 @@ module.exports = {
     */
     create: async (req, res) => {
         try {
-            const { user, immeuble, loyer, caution, dateStart } = req.body
+            const { user, appartement, loyer, caution, dateStart } = req.body
 
-            // finir les config de la session
-            // const user = req.session.user.id || req.body.user   
-            //immeuble ne dois pas etre deja occuper 
-
-
-            const location = await LocationService.create(user, immeuble, loyer, caution, dateStart);
+            const location = await LocationService.create(user, appartement, loyer, caution, dateStart);
 
             return res.ok({
                 status: 'success',
