@@ -50,6 +50,9 @@ module.exports.routes = {
   'PUT /api/v1/location': { controller: 'LocationController', action: 'update' },
   'GET /api/v1/location': { controller: 'LocationController', action: 'getMylocation' },
 
+  // Appartements
+  'POST /api/v1/appartement': { controller: 'AppartementController', action: 'create' },
+
 
   // Rechercher
   'GET /api/v1/search': { controller: 'SearchController', action: 'search' },

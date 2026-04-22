@@ -13,6 +13,7 @@ module.exports = {
       type: 'string',
       required: true,
       maxLength: 50,
+      unique: true,
       description: 'Nom ou numéro de l\'appartement (ex: Porte 4, A1)'
     },
 
@@ -54,6 +55,13 @@ module.exports = {
     description: {
       type: 'string',
       description: 'Description spécifique de l\'unité'
+    },
+
+    status: {
+      type: 'string',
+      isIn: ['active', 'inactive', 'deleted', 'blocked'],
+      defaultsTo: 'active',
+      description: 'Status de L\'Appartement'
     },
 
     immeuble: {
