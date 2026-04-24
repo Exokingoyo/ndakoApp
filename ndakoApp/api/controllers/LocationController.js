@@ -37,12 +37,9 @@ module.exports = {
     */
     update: async (req, res) => {
         try {
-            const { userId, appartement, caution, dateStart } = req.body
-            const id = req.params.id || req.query.id
+            const { userId, appartementId, locationId, caution, dateStart, dateEnd, status } = req.body
 
-            sails.log("id", id, "data", { user, immeuble, loyer, caution, dateStart })
-
-            const location = await LocationService.update(id, { user, immeuble, loyer, caution, dateStart });
+            const location = await LocationService.update(locationId, { userId, appartementId, caution, dateStart, dateEnd, status });
 
             return res.ok({
                 status: 'success',
@@ -66,7 +63,7 @@ module.exports = {
             const { page = 1, limit = 10, user, name, address, city, province, country, type, description, status } = req.query
             // req.query.user = req.session.user || req.query.user
 
-            const locations = await locationService.findByCriteria(page, limit, user, name, address, city, province, country, type, description, status);
+            const locations = await LocationService.findByCriteria(page, limit, user, name, address, city, province, country, type, description, status);
             return res.status(200).json(locations);
 
         } catch (error) {

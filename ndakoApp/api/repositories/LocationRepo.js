@@ -3,7 +3,7 @@ module.exports = {
 
     getAll: async function () {
         try {
-            return await Location.find().populate('user').populate('immeuble');
+            return await Location.find().populate('user').populate('appartement');
         } catch (error) {
             throw error;
         }
@@ -35,7 +35,7 @@ module.exports = {
 
     findByCriteria: async function (criteria = {}) {
         try {
-            return await Location.find(criteria).populate('user').populate('immeuble');
+            return await Location.find(criteria).populate('user').populate('appartement');
         } catch (error) {
             throw error;
         }
@@ -43,7 +43,7 @@ module.exports = {
 
     findById: async function (id) {
         try {
-            return await Location.findOne(id).populate('user').populate('immeuble');
+            return await Location.findOne(id).populate('user').populate('appartement');
         } catch (error) {
             throw error;
         }
