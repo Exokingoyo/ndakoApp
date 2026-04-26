@@ -87,6 +87,15 @@ module.exports.routes = {
   // Notifications
   'GET /api/v1/notification': { controller: 'NotificationController', action: 'getMyNotifications' },
   'PUT /api/v1/notification/:id': { controller: 'NotificationController', action: 'markAsRead' },
+  'PUT /api/v1/notification/mark-all': { controller: 'NotificationController', action: 'markAllAsRead' },
+  'GET /api/v1/notification/unread-count': { controller: 'NotificationController', action: 'getUnreadCount' },
+  'GET /api/v1/notification/total-count': { controller: 'NotificationController', action: 'getTotalCount' },
+  'GET /api/v1/notification/recent': { controller: 'NotificationController', action: 'getRecentNotifications' },
+  'GET /api/v1/notification/by-type/:type': { controller: 'NotificationController', action: 'getByType' },
+  'GET /api/v1/notification/by-source/:sourceType': { controller: 'NotificationController', action: 'getBySource' },
+  'GET /api/v1/notification/summary': { controller: 'NotificationController', action: 'getSummary' },
+  'DELETE /api/v1/notification/:id': { controller: 'NotificationController', action: 'deleteNotification' },
+  'DELETE /api/v1/notification/delete-all': { controller: 'NotificationController', action: 'deleteAllNotifications' },
 
   // Dashboard
   'GET /api/v1/dashboard': { controller: 'DashboardController', action: 'getStats' },

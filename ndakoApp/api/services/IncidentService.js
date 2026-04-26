@@ -48,7 +48,10 @@ module.exports = {
                 await NotificationService.notify(
                     appartement.immeuble.user,
                     `Nouvel incident signalé : ${incident.title} signalé à l\'immeuble ${appartement.immeuble.name} , Appartement ${appartement.name}`,
-                    'warning'
+                    'warning',
+                    'incident',
+                    incident.id,
+                    `/incident/${incident.id}`
                 );
             }
 
@@ -82,7 +85,10 @@ module.exports = {
             await NotificationService.notify(
                 incident.user.id,
                 `Le statut de votre incident "${incident.title}" est maintenant : ${status}`,
-                'info'
+                'info',
+                'incident',
+                updatedIncident.id,
+                `/incident/${updatedIncident.id}`
             );
 
             return updatedIncident;
@@ -129,7 +135,10 @@ module.exports = {
             await NotificationService.notify(
                 incident.user.id,
                 `Votre incident "${incident.title}" a été escaladé en priorité élevée.`,
-                'warning'
+                'warning',
+                'incident',
+                updated.id,
+                `/incident/${updated.id}`
             );
 
             return updated;
