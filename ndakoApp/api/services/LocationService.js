@@ -124,9 +124,9 @@ module.exports = {
         }
     },
 
-    findByCriteria: async function (criteria) {
+    findByCriteria: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit) {
         try {
-            return await LocationRepo.findByCriteria(criteria);
+            return await LocationRepo.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit);
         } catch (error) {
             throw error;
         }
@@ -135,6 +135,21 @@ module.exports = {
     findById: async function (id) {
         try {
             return await LocationRepo.findById(id);
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    changeStatus: async function (id, status) {
+        try {
+            const location = await LocationRepo.findById(id);
+            if (!location) throw ({ message: 'La location n\'existe pas.' });
+
+            if (!['active', 'inactive'].includes(status)) throw ({ message: 'Status invalide.' });
+
+            await LocationRepo.update(id, { status });
+            await AppartementRepo.update(location.appartement.id, { is_vacant: true });
+
         } catch (error) {
             throw error;
         }
