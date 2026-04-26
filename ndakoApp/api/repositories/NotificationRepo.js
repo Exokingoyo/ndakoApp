@@ -3,7 +3,7 @@ module.exports = {
 
     create: async function (data) {
         try {
-            return await Notification.create(data).fetch();
+            return await Notification.create(data);
         } catch (error) {
             throw error;
         }

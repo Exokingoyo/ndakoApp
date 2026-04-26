@@ -70,8 +70,15 @@ module.exports.routes = {
 
   // Incidents
   'POST /api/v1/incident': { controller: 'IncidentController', action: 'report' },
-  'PUT /api/v1/incident/:id': { controller: 'IncidentController', action: 'updateStatus' },
-  'GET /api/v1/incident': { controller: 'IncidentController', action: 'getMyIncidents' },
+  'PATCH /api/v1/incident/:id/status': { controller: 'IncidentController', action: 'updateStatus' },
+  'GET /api/v1/incident/my-incidents': { controller: 'IncidentController', action: 'getMyIncidents' },
+  // 'PATCH /api/v1/incident/:id/assign': { controller: 'IncidentController', action: 'assign' },
+  // 'POST /api/v1/incident/:id/comment': { controller: 'IncidentController', action: 'comment' },
+  'PATCH /api/v1/incident/:id/escalate': { controller: 'IncidentController', action: 'escalate' },
+  'GET /api/v1/incident/stats': { controller: 'IncidentController', action: 'stats' },
+  'GET /api/v1/incident/immeuble/:immeubleId': { controller: 'IncidentController', action: 'byImmeuble' },
+  'GET /api/v1/incident/priority/high': { controller: 'IncidentController', action: 'highPriority' },
+  'GET /api/v1/incident/active': { controller: 'IncidentController', action: 'active' },
 
   // Messagerie
   'POST /api/v1/message': { controller: 'MessageController', action: 'send' },
