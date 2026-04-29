@@ -210,7 +210,7 @@ module.exports = {
             await NotificationService.notify(
                 location.user.id,
                 `Le statut de votre contrat de location pour ${location.appartement.name} est maintenant : ${status}.`,
-                'info',
+                'warning',
                 'location',
                 updatedLocation.id,
                 `/location/${updatedLocation.id}`
@@ -227,7 +227,7 @@ module.exports = {
                     await NotificationService.notify(
                         proprio.id,
                         `Le statut du contrat de location de ${locataireName || 'ce locataire'} pour l'appartement ${location.appartement.name} est maintenant : ${status}.`,
-                        'info',
+                        'warning',
                         'location',
                         updatedLocation.id,
                         `/location/${updatedLocation.id}`
