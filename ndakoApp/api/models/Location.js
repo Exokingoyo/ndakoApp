@@ -14,6 +14,7 @@ module.exports = {
       required: true,
       description: 'prix du loyer'
     },
+    
 
     dateStart: {
       type: 'string',

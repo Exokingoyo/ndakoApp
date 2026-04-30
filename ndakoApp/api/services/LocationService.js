@@ -20,6 +20,10 @@ module.exports = {
                 throw ({ message: 'L\'appartement est requis.' });
             }
 
+            if (!data.typeLocation) {
+                throw ({ message: 'Le type de contrat est requis. ' });
+            }
+
             const appartement = await AppartementRepo.findById(data.appartementId);
 
             if (!appartement) {
@@ -31,6 +35,11 @@ module.exports = {
             if (appartement.is_vacant !== true) {
                 throw ({ message: 'l\'appartement n\'est pas disponible.' });
             }
+
+            sails.log("appart", appartement)
+
+            return
+
 
             if (!data.userId) {
                 throw ({ message: 'L\'utilisateur est requis.' });

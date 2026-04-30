@@ -18,9 +18,9 @@ module.exports = {
      */
     create: async (req, res) => {
         try {
-            const { userId, appartementId, caution, dateStart } = req.body;
+            const { userId, appartementId, caution, dateStart, typeLocation } = req.body;
 
-            const location = await LocationService.create({ userId, appartementId, caution, dateStart });
+            const location = await LocationService.create({ userId, appartementId, caution, dateStart, typeLocation });
 
             return res.status(201).json({
                 status: 'success',
