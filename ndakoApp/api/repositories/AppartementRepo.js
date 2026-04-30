@@ -41,14 +41,7 @@ module.exports = {
                         ...(description ? { description } : {}),
                         ...(is_vacant ? { is_vacant } : {}),
                         ...(description ? { description } : {}),
-
-                        ...(typeLocation ? {
-                            type_location: {
-                                contains: typeLocation,
-                            }
-
-                        } : {}),
-
+                        ...(typeLocation ? { typeLocation } : {}),
 
                         // imbrication
                         ...(loyerStart || loyerEnd ? {

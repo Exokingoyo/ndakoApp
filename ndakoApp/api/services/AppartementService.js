@@ -49,7 +49,7 @@ module.exports = {
 
             return await AppartementRepo.create({
                 immeuble: data.immeubleId,
-                type_location: data.typeLocation.toLowerCase(),
+                typeLocation: data.typeLocation,
                 ...data
             });
         } catch (error) {
@@ -90,7 +90,7 @@ module.exports = {
 
             return await AppartementRepo.update(id, {
                 ...data,
-                type_location: data.typeLocation.toLowerCase(),
+                typeLocation: data.typeLocation,
                 immeuble: data.immeubleId,
             });
         } catch (error) {

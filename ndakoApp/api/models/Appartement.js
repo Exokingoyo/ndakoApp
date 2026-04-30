@@ -75,7 +75,7 @@ module.exports = {
       via: 'appartement'
     },
 
-    type_location: {
+    typeLocation: {
       type: 'json',
       defaultsTo: ['mensuel', 'journalier', 'horaire']
     },
@@ -84,8 +84,8 @@ module.exports = {
 
   beforeCreate: function (valuesToCreate, proceed) {
     const allowed = ['mensuel', 'journalier', 'horaire'];
-    if (valuesToCreate.type_location) {
-      const isValid = valuesToCreate.type_location.every(type => allowed.includes(type));
+    if (valuesToCreate.typeLocation) {
+      const isValid = valuesToCreate.typeLocation.every(type => allowed.includes(type));
       if (!isValid) {
         return proceed(new Error('Type de location invalide.  Utilisez: Mensuel, Journalier ou horaire '))
       }
