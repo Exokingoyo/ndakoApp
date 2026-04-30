@@ -26,7 +26,7 @@ module.exports = {
     loyer: {
       type: 'number',
       required: true,
-      description: 'Prix du loyer mensuel'
+      description: 'Prix du loyer '
     },
 
     surface_area: {
