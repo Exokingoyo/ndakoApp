@@ -25,7 +25,7 @@ module.exports = {
         }
     },
 
-    findByCriteria: async function (page, limit, user, immeuble, name, loyerStart, loyerEnd, etage, chambreMin, ChambreMax, bathroomsMin, bathroomsMax, surface_areaMin, surface_areaMax, is_vacant, description, status) {
+    findByCriteria: async function (page, limit, user, immeuble, name, loyerStart, loyerEnd, etage, chambreMin, ChambreMax, bathroomsMin, bathroomsMax, surface_areaMin, surface_areaMax, is_vacant, description, status, typeLocation) {
         try {
 
             const whereClause = {
@@ -41,6 +41,14 @@ module.exports = {
                         ...(description ? { description } : {}),
                         ...(is_vacant ? { is_vacant } : {}),
                         ...(description ? { description } : {}),
+
+                        ...(typeLocation ? {
+                            type_location: {
+                                contains: typeLocation,
+                            }
+
+                        } : {}),
+
 
                         // imbrication
                         ...(loyerStart || loyerEnd ? {
@@ -80,6 +88,7 @@ module.exports = {
                 ]
             }
 
+            sails.log(whereClause)
 
             const total = await Appartement.count(whereClause);
 
