@@ -41,7 +41,7 @@ module.exports = {
     //     }
     // },
 
-    findByCriteria: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit) {
+    findByCriteria: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation) {
         try {
 
             const whereClause = {
@@ -49,6 +49,7 @@ module.exports = {
                     {
                         ...(user ? { user } : {}),
                         ...(status ? { status } : {}),
+                        ...(typeLocation ? { typeLocation } : {}),
 
                         ...(loyerMin || loyerMax ? {
                             loyer: {
@@ -102,6 +103,7 @@ module.exports = {
             throw error;
         }
     },
+    
     findById: async function (id) {
         try {
             return await Location.findOne(id).populate('user').populate('appartement');
@@ -110,6 +112,12 @@ module.exports = {
         }
     },
 
-
+    // getMylocation: async function (userId) {
+    //     try {
+    //         return await Location.find({ user: userId }).populate('user').populate('appartement');
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // }
 
 }

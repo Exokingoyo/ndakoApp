@@ -46,10 +46,10 @@ module.exports.routes = {
 
 
   // Location
-  'POST /api/v1/location': { controller: 'LocationController', action: 'create' },
-  'PUT /api/v1/location': { controller: 'LocationController', action: 'update' },
-  'GET /api/v1/location': { controller: 'LocationController', action: 'getMylocation' },
-  'GET /api/v1/location/:id': { controller: 'LocationController', action: 'getById' },
+  'POST /api/v1/locations': { controller: 'LocationController', action: 'create' },
+  'PUT /api/v1/locations': { controller: 'LocationController', action: 'update' },
+  'GET /api/v1/me/locations': { controller: 'LocationController', action: 'getMylocation' },
+  'GET /api/v1/locations/:id': { controller: 'LocationController', action: 'getById' },
   'GET /api/v1/locations': { controller: 'LocationController', action: 'find' },
   'PUT /api/v1/locations/:id/status': { controller: 'LocationController', action: 'changeStatus' },
 

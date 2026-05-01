@@ -21,6 +21,10 @@ module.exports = {
                 throw ({ message: 'L\'appartement est requis.' });
             }
 
+            if (!data.typeLocation) {
+                throw ({ message: 'Le type de contrat est requis. ' });
+            }
+
             const appartement = await AppartementRepo.findById(data.appartementId);
 
             if (!appartement) {
@@ -31,6 +35,13 @@ module.exports = {
             }
             if (appartement.is_vacant !== true) {
                 throw ({ message: 'l\'appartement n\'est pas disponible.' });
+            }
+
+            let tableau = appartement.typeLocation;
+            let chaine = data.typeLocation;
+
+            if (!tableau.includes(chaine)) {
+                throw ({ message: 'Pour cette appartement le type de contrat  disponible est : ' + tableau.join(', ') + '.' });
             }
 
             if (!data.userId) {
@@ -57,8 +68,12 @@ module.exports = {
 
             const locationData = {
                 caution: data.caution,
-                loyer: appartement.loyer,
-                user: data.userId,
+                typeLocation: data.typeLocation,
+                priceMonthly: appartement.loyer,
+                priceDaily: appartement.loyer / 30,
+                priceHourly: appartement.loyer / 720,
+                locateur: data.userId,
+                bailleur: appartement.immeuble.user,
                 appartement: data.appartementId,
                 dateStart: data.dateStart || new Date(),
             };
@@ -128,9 +143,19 @@ module.exports = {
             //     throw ({ message: 'l\'utilisateur doit être un locataire.' });
             // }
 
+            let tableau = appartement.typeLocation;
+            let chaine = data.typeLocation;
+
+            if (!tableau.includes(chaine)) {
+                throw ({ message: 'Pour cette appartement le type de contrat  disponible est : ' + tableau.join(', ') + '.' });
+            }
+
             const locationData = {
-                caution: data.caution || existingLocation.caution,
-                loyer: appartement.loyer,
+                caution: data.caution || locationId.caution,
+               typeLocation: data.typeLocation,
+                priceMonthly: appartement.loyer,
+                priceDaily: appartement.loyer / 30,
+                priceHourly: appartement.loyer / 720,
                 user: data.userId,
                 appartement: data.appartementId,
                 dateStart: data.dateStart,
@@ -181,9 +206,26 @@ module.exports = {
         }
     },
 
-    findByCriteria: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit) {
+    findByCriteria: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation) {
         try {
-            return await LocationRepo.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit);
+            return await LocationRepo.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getMylocation: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation) {
+        try {
+            const userVerifier = await UserRepo.findById(user);
+
+            if (!userVerifier) throw ({ message: 'l\'utilisateur n\'exite pas.' });
+
+            if (userVerifier.status !== 'active') throw ({ message: 'l\'utilisateur n\'est pas active.' });
+
+            if (userVerifier.is_active !== true) throw ({ message: 'l\'utilisateur n\'est pas actif.' });
+
+            return await LocationRepo.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
+
         } catch (error) {
             throw error;
         }
