@@ -1,4 +1,3 @@
-const Sails = require("sails/lib/app/Sails");
 const AppartementRepo = require("../repositories/AppartementRepo");
 const ImmeubleRepo = require("../repositories/ImmeubleRepo");
 const sailsHookGrunt = require("sails-hook-grunt");
