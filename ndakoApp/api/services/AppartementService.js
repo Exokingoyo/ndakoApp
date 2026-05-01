@@ -35,8 +35,21 @@ module.exports = {
                 throw ({ message: 'l\'immeuble n\'est pas active.' });
             }
 
+            if (!Array.isArray(data.typeLocation)) {
+                throw ({ message: ' le type de location doit etre un tableau  .' });
+            }
+
+            const typeAutorises = ['mensuel', 'journalier', 'horaire'];
+            const contenuValide = data.typeLocation.every(type => typeAutorises.includes(type))
+
+
+            if (!contenuValide) {
+                throw ({ message: 'Type de location invalide.  Utilisez: Mensuel, Journalier ou horaire .' });
+            }
+
             return await AppartementRepo.create({
                 immeuble: data.immeubleId,
+                typeLocation: data.typeLocation,
                 ...data
             });
         } catch (error) {
@@ -57,6 +70,18 @@ module.exports = {
                 }
             }
 
+            if (!Array.isArray(data.typeLocation)) {
+                throw ({ message: ' le type de location doit etre un tableau  .' });
+            }
+
+            const typeAutorises = ['mensuel', 'journalier', 'horaire'];
+            const contenuValide = data.typeLocation.every(type => typeAutorises.includes(type))
+
+
+            if (!contenuValide) {
+                throw ({ message: 'Type de location invalide.  Utilisez: Mensuel, Journalier ou horaire .' });
+            }
+
             const appartement = await this.findById(id);
 
             if (!appartement) {
@@ -65,6 +90,7 @@ module.exports = {
 
             return await AppartementRepo.update(id, {
                 ...data,
+                typeLocation: data.typeLocation,
                 immeuble: data.immeubleId,
             });
         } catch (error) {
@@ -80,9 +106,9 @@ module.exports = {
         }
     },
 
-    findByCriteria: async function (page, limit, userId, immeubleId, name, loyerStart, loyerEnd, etage, chambreMin, ChambreMax, bathroomsMin, bathroomsMax, surface_areaMin, surface_areaMax, is_vacant, description, status) {
+    findByCriteria: async function (page, limit, userId, immeubleId, name, loyerStart, loyerEnd, etage, chambreMin, ChambreMax, bathroomsMin, bathroomsMax, surface_areaMin, surface_areaMax, is_vacant, description, status, typeLocation) {
         try {
-            return await AppartementRepo.findByCriteria(page, limit, userId, immeubleId, name, loyerStart, loyerEnd, etage, chambreMin, ChambreMax, bathroomsMin, bathroomsMax, surface_areaMin, surface_areaMax, is_vacant, description, status);
+            return await AppartementRepo.findByCriteria(page, limit, userId, immeubleId, name, loyerStart, loyerEnd, etage, chambreMin, ChambreMax, bathroomsMin, bathroomsMax, surface_areaMin, surface_areaMax, is_vacant, description, status, typeLocation);
         } catch (error) {
             throw error;
         }
