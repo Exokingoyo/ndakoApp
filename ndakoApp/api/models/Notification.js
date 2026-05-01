@@ -32,6 +32,28 @@ module.exports = {
       description: 'Celui qui reçoit la notification'
     },
 
+    // Métadonnées pour tracer la source de la notification
+    // Permet de relier une notification à son contexte métier (incident, location, etc.)
+    sourceType: {
+      type: 'string',
+      isIn: ['incident', 'location', 'payment', 'review', 'message', 'system'],
+      description: 'Type de source: incident, location, paiement, etc.'
+    },
+
+    // ID de la ressource qui a générée la notification
+    // Ex: ID de l\'incident, de la location, du paiement
+    sourceId: {
+      type: 'string',
+      description: 'ID de la ressource concernée (incident ID, location ID, etc.)'
+    },
+
+    // URL d\'action pour rediriger l\'utilisateur vers la ressource
+    // Ex: /incident/123, /location/456
+    actionUrl: {
+      type: 'string',
+      description: 'Lien pour accéder à la ressource depuis la notification'
+    }
+
   },
 
 };

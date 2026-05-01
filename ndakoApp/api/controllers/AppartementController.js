@@ -16,7 +16,7 @@ module.exports = {
      */
     create: async function (req, res) {
         try {
-            const { immeubleId, name, loyer, etage, chambre, bathrooms, surface_area, description } = req.body;
+            const { immeubleId, name, loyer, etage, chambre, bathrooms, surface_area, description, typeLocation } = req.body;
 
             const newAppartement = await AppartementService.create({
                 immeubleId,
@@ -27,6 +27,7 @@ module.exports = {
                 bathrooms,
                 surface_area,
                 description,
+                typeLocation
             });
 
             return res.ok({
@@ -45,11 +46,11 @@ module.exports = {
      */
     update: async (req, res) => {
         try {
-            const { immeubleId, name, loyer, etage, chambre, bathrooms, surface_area, is_vacant, description, status } = req.body;
+            const { immeubleId, name, loyer, etage, chambre, bathrooms, surface_area, is_vacant, description, status, typeLocation } = req.body;
 
             const appartementId = req.params.id || req.body.appartementId
 
-            const appartement = await AppartementService.update(appartementId, { immeubleId, name, loyer, etage, chambre, bathrooms, surface_area, is_vacant, description, status });
+            const appartement = await AppartementService.update(appartementId, { immeubleId, name, loyer, etage, chambre, bathrooms, surface_area, is_vacant, description, status, typeLocation });
 
             return res.ok({
                 status: 'success',
@@ -121,9 +122,9 @@ module.exports = {
      */
     getAllAppartements: async function (req, res) {
         try {
-            const { page = 1, limit = 10, userId, immeubleId, name, loyerStart, loyerEnd, etage, chambreMin, ChambreMax, bathroomsMin, bathroomsMax, surface_areaMin, surface_areaMax, is_vacant, description, status } = req.query;
+            const { page = 1, limit = 10, userId, immeubleId, name, loyerStart, loyerEnd, etage, chambreMin, ChambreMax, bathroomsMin, bathroomsMax, surface_areaMin, surface_areaMax, is_vacant, description, status, typeLocation } = req.query;
 
-            const appartements = await AppartementService.findByCriteria(page, limit, userId, immeubleId, name, loyerStart, loyerEnd, etage, chambreMin, ChambreMax, bathroomsMin, bathroomsMax, surface_areaMin, surface_areaMax, is_vacant, description, status);
+            const appartements = await AppartementService.findByCriteria(page, limit, userId, immeubleId, name, loyerStart, loyerEnd, etage, chambreMin, ChambreMax, bathroomsMin, bathroomsMax, surface_areaMin, surface_areaMax, is_vacant, description, status, typeLocation);
             return res.ok({
                 status: 'success',
                 message: 'Les Appartements ont ete recuperer succes',
@@ -134,6 +135,6 @@ module.exports = {
         }
     },
 
-    
+
 
 };

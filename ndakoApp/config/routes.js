@@ -46,9 +46,12 @@ module.exports.routes = {
 
 
   // Location
-  'POST /api/v1/location': { controller: 'LocationController', action: 'create' },
-  'PUT /api/v1/location': { controller: 'LocationController', action: 'update' },
-  'GET /api/v1/location': { controller: 'LocationController', action: 'getMylocation' },
+  'POST /api/v1/locations': { controller: 'LocationController', action: 'create' },
+  'PUT /api/v1/locations': { controller: 'LocationController', action: 'update' },
+  'GET /api/v1/me/locations': { controller: 'LocationController', action: 'getMylocation' },
+  'GET /api/v1/locations/:id': { controller: 'LocationController', action: 'getById' },
+  'GET /api/v1/locations': { controller: 'LocationController', action: 'find' },
+  'PUT /api/v1/locations/:id/status': { controller: 'LocationController', action: 'changeStatus' },
 
   // Appartements
   'POST /api/v1/appartement': { controller: 'AppartementController', action: 'create' },
@@ -67,8 +70,15 @@ module.exports.routes = {
 
   // Incidents
   'POST /api/v1/incident': { controller: 'IncidentController', action: 'report' },
-  'PUT /api/v1/incident/:id': { controller: 'IncidentController', action: 'updateStatus' },
-  'GET /api/v1/incident': { controller: 'IncidentController', action: 'getMyIncidents' },
+  'PATCH /api/v1/incident/:id/status': { controller: 'IncidentController', action: 'updateStatus' },
+  'GET /api/v1/incident/my-incidents': { controller: 'IncidentController', action: 'getMyIncidents' },
+  // 'PATCH /api/v1/incident/:id/assign': { controller: 'IncidentController', action: 'assign' },
+  // 'POST /api/v1/incident/:id/comment': { controller: 'IncidentController', action: 'comment' },
+  'PATCH /api/v1/incident/:id/escalate': { controller: 'IncidentController', action: 'escalate' },
+  'GET /api/v1/incident/stats': { controller: 'IncidentController', action: 'stats' },
+  'GET /api/v1/incident/immeuble/:immeubleId': { controller: 'IncidentController', action: 'byImmeuble' },
+  'GET /api/v1/incident/priority/high': { controller: 'IncidentController', action: 'highPriority' },
+  'GET /api/v1/incident/active': { controller: 'IncidentController', action: 'active' },
 
   // Messagerie
   'POST /api/v1/message': { controller: 'MessageController', action: 'send' },
@@ -77,6 +87,15 @@ module.exports.routes = {
   // Notifications
   'GET /api/v1/notification': { controller: 'NotificationController', action: 'getMyNotifications' },
   'PUT /api/v1/notification/:id': { controller: 'NotificationController', action: 'markAsRead' },
+  'PUT /api/v1/notification/mark-all': { controller: 'NotificationController', action: 'markAllAsRead' },
+  'GET /api/v1/notification/unread-count': { controller: 'NotificationController', action: 'getUnreadCount' },
+  'GET /api/v1/notification/total-count': { controller: 'NotificationController', action: 'getTotalCount' },
+  'GET /api/v1/notification/recent': { controller: 'NotificationController', action: 'getRecentNotifications' },
+  'GET /api/v1/notification/by-type/:type': { controller: 'NotificationController', action: 'getByType' },
+  'GET /api/v1/notification/by-source/:sourceType': { controller: 'NotificationController', action: 'getBySource' },
+  'GET /api/v1/notification/summary': { controller: 'NotificationController', action: 'getSummary' },
+  'DELETE /api/v1/notification/:id': { controller: 'NotificationController', action: 'deleteNotification' },
+  'DELETE /api/v1/notification/delete-all': { controller: 'NotificationController', action: 'deleteAllNotifications' },
 
   // Dashboard
   'GET /api/v1/dashboard': { controller: 'DashboardController', action: 'getStats' },

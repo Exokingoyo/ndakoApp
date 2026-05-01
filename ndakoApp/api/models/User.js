@@ -54,6 +54,7 @@ module.exports = {
       type: 'string',
       required: true,
       maxLength: 20,
+      unique: true,
       description: 'Numero du telephone de l\'utilisateur'
     },
 
@@ -105,10 +106,16 @@ module.exports = {
       description: 'Si Utilisateur Bailleur'
     },
 
-    locations: {
+    locationsLocataire: {
       collection: 'location',
-      via: 'user',
+      via: 'locateur',
       description: 'Si Utilisateur Locateur'
+    },
+
+    locationsBailleur: {
+      collection: 'location',
+      via: 'bailleur',
+      description: 'Si Utilisateur Bailleur'
     },
 
     payements: {

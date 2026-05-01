@@ -26,7 +26,7 @@ module.exports = {
     loyer: {
       type: 'number',
       required: true,
-      description: 'Prix du loyer mensuel'
+      description: 'Prix du loyer '
     },
 
     surface_area: {
@@ -75,6 +75,22 @@ module.exports = {
       via: 'appartement'
     },
 
+    typeLocation: {
+      type: 'json',
+      defaultsTo: ['mensuel', 'journalier', 'horaire']
+    },
+
   },
+
+  beforeCreate: function (valuesToCreate, proceed) {
+    const allowed = ['mensuel', 'journalier', 'horaire'];
+    if (valuesToCreate.typeLocation) {
+      const isValid = valuesToCreate.typeLocation.every(type => allowed.includes(type));
+      if (!isValid) {
+        return proceed(new Error('Type de location invalide.  Utilisez: Mensuel, Journalier ou horaire '))
+      }
+    }
+    return proceed()
+  }
 
 };

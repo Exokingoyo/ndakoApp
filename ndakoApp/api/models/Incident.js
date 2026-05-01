@@ -5,6 +5,8 @@
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
+const Appartement = require("./Appartement");
+
 module.exports = {
 
   attributes: {
@@ -39,8 +41,8 @@ module.exports = {
       description: 'Celui qui signale l\'incident'
     },
 
-    immeuble: {
-      model: 'immeuble',
+    appartement: {
+      model: 'appartement',
       required: true,
       description: 'Où l\'incident a eu lieu'
     },
@@ -49,6 +51,28 @@ module.exports = {
       model: 'location',
       description: 'Optionnel: Le contrat de location concerné'
     },
+
+
+    // Priorité métier pour trier/filtrer les incidents
+    // low: peut attendre quelques jours
+    // medium: traiter dans les 24-48h (par défaut)
+    // high: urgent, demande une action immédiate
+    priority: {
+      type: 'string',
+      isIn: ['low', 'medium', 'high'],
+      defaultsTo: 'medium',
+      description: 'Priorité de l\'incident'
+    },
+
+    // Liste de commentaires ou notes internes
+    // Format: [{author: userId, text: "...", createdAt: date}, ...]
+    // Permet la traçabilité complète du suivi
+    comments: {
+      type: 'json',
+      defaultsTo: [],
+      description: 'Commentaires et notes internes au sujet de l\'incident'
+    }
+
 
   },
 
