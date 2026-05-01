@@ -18,9 +18,9 @@ module.exports = {
      */
     create: async (req, res) => {
         try {
-            const { userId, appartementId, caution, dateStart } = req.body;
+            const { userId, appartementId, caution, dateStart, typeLocation } = req.body;
 
-            const location = await LocationService.create({ userId, appartementId, caution, dateStart });
+            const location = await LocationService.create({ userId, appartementId, caution, dateStart, typeLocation });
 
             return res.status(201).json({
                 status: 'success',
@@ -43,11 +43,11 @@ module.exports = {
      */
     update: async (req, res) => {
         try {
-            const { locationId, userId, appartementId, caution, dateStart, dateEnd, status } = req.body;
+            const { locationId, userId, appartementId, caution, dateStart, dateEnd, status, typeLocation } = req.body;
 
             if (!locationId) return res.badRequest({ status: 'error', message: 'L\'identifiant de la location est requis.' });
 
-            const location = await LocationService.update(locationId, { userId, appartementId, caution, dateStart, dateEnd, status });
+            const location = await LocationService.update(locationId, { userId, appartementId, caution, dateStart, dateEnd, status, typeLocation });
 
             return res.ok({
                 status: 'success',
@@ -62,6 +62,31 @@ module.exports = {
             });
         }
     },
+
+
+    getMylocation: async (req, res) => {
+        try {
+            const { status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, typeLocation } = req.query;
+            const page = parseInt(req.query.page, 10) || 1;
+            const limit = parseInt(req.query.limit, 10) || 10;
+
+            const user = req.session?.user?.id ? req.body.user?.id : null;
+            const locations = await LocationService.getMylocation(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
+
+            return res.ok({
+                status: 'success',
+                message: 'Location récupérée avec succès.',
+                locations
+            });
+        } catch (error) {
+            sails.log.error('LocationController.getMylocation erreur :', error);
+            return res.serverError({
+                status: 'error',
+                message: error.message || 'Erreur lors de la récupération de la location.'
+            });
+        }
+    },
+
 
     /**
      * Récupérer toutes les locations (sans filtre).
@@ -126,7 +151,7 @@ module.exports = {
 
     /**
      * Rechercher / lister les locations par critères avec pagination.
-     * Query params supportés: page, limit, user, appartement, status, dateStart, dateEnd
+     * Query params supportés: page, limit, user, appartement, status, dateStart, dateEnd, typeLocation
      * Exemple: `?page=1&limit=20&user=123&status=active`
      */
     find: async (req, res) => {
@@ -134,9 +159,9 @@ module.exports = {
             const page = parseInt(req.query.page, 10) || 1;
             const limit = parseInt(req.query.limit, 10) || 10;
 
-            const { user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd } = req.query;
+            const { user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, typeLocation } = req.query;
 
-            const locations = await LocationService.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit);
+            const locations = await LocationService.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
             return res.ok({
                 status: 'success',
                 message: 'Locations récupérées avec succès.',

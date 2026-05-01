@@ -9,10 +9,22 @@ module.exports = {
 
   attributes: {
 
-    loyer: {
+    priceMonthly: {
       type: 'number',
       required: true,
-      description: 'prix du loyer'
+      description: 'prix du loyer mensuel'
+    },
+
+    priceDaily: {
+      type: 'number',
+      required: true,
+      description: 'prix du loyer quotidien'
+    },
+
+    priceHourly: {
+      type: 'number',
+      required: true,
+      description: 'prix du loyer horaire'
     },
 
     dateStart: {
@@ -39,16 +51,28 @@ module.exports = {
       description: 'Status du contrat'
     },
 
-    user: {
+    locateur: {
       model: 'user',
       required: true,
       description: 'Utilisateur Locateur'
+    },
+
+    bailleur: {
+      model: 'user',
+      required: true,
+      description: 'Utilisateur Bailleur'
     },
 
     // immeuble: {
     //   model: 'immeuble',
     //   required: true,
     // },
+
+    typeLocation: {
+      type: 'string',
+      isIn: ['horaire', 'journalier', 'mensuel'],
+      required: true
+    },
 
     payements: {
       collection: 'payement',
