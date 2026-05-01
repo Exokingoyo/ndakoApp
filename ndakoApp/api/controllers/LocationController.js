@@ -63,6 +63,31 @@ module.exports = {
         }
     },
 
+
+    getMylocation: async (req, res) => {
+        try {
+            const { status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, typeLocation } = req.query;
+            const page = parseInt(req.query.page, 10) || 1;
+            const limit = parseInt(req.query.limit, 10) || 10;
+
+            const user = req.session?.user?.id ? req.body.user?.id : null;
+            const locations = await LocationService.getMylocation(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
+
+            return res.ok({
+                status: 'success',
+                message: 'Location récupérée avec succès.',
+                locations
+            });
+        } catch (error) {
+            sails.log.error('LocationController.getMylocation erreur :', error);
+            return res.serverError({
+                status: 'error',
+                message: error.message || 'Erreur lors de la récupération de la location.'
+            });
+        }
+    },
+
+
     /**
      * Récupérer toutes les locations (sans filtre).
      * Utile pour l'administration.

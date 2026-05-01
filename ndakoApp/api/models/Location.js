@@ -51,10 +51,16 @@ module.exports = {
       description: 'Status du contrat'
     },
 
-    user: {
+    locateur: {
       model: 'user',
       required: true,
       description: 'Utilisateur Locateur'
+    },
+
+    bailleur: {
+      model: 'user',
+      required: true,
+      description: 'Utilisateur Bailleur'
     },
 
     // immeuble: {

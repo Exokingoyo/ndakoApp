@@ -103,6 +103,7 @@ module.exports = {
             throw error;
         }
     },
+    
     findById: async function (id) {
         try {
             return await Location.findOne(id).populate('user').populate('appartement');
@@ -111,6 +112,12 @@ module.exports = {
         }
     },
 
-
+    // getMylocation: async function (userId) {
+    //     try {
+    //         return await Location.find({ user: userId }).populate('user').populate('appartement');
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // }
 
 }

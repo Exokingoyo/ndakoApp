@@ -71,7 +71,8 @@ module.exports = {
                 priceMonthly: appartement.loyer,
                 priceDaily: appartement.loyer / 30,
                 priceHourly: appartement.loyer / 720,
-                user: data.userId,
+                locateur: data.userId,
+                bailleur: appartement.immeuble.user,
                 appartement: data.appartementId,
                 dateStart: data.dateStart || new Date(),
             };
@@ -151,6 +152,23 @@ module.exports = {
     findByCriteria: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation) {
         try {
             return await LocationRepo.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getMylocation: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation) {
+        try {
+            const userVerifier = await UserRepo.findById(user);
+
+            if (!userVerifier) throw ({ message: 'l\'utilisateur n\'exite pas.' });
+
+            if (userVerifier.status !== 'active') throw ({ message: 'l\'utilisateur n\'est pas active.' });
+
+            if (userVerifier.is_active !== true) throw ({ message: 'l\'utilisateur n\'est pas actif.' });
+
+            return await LocationRepo.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
+
         } catch (error) {
             throw error;
         }
