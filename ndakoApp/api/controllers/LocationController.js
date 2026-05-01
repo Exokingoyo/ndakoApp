@@ -43,11 +43,11 @@ module.exports = {
      */
     update: async (req, res) => {
         try {
-            const { locationId, userId, appartementId, caution, dateStart, dateEnd, status } = req.body;
+            const { locationId, userId, appartementId, caution, dateStart, dateEnd, status, typeLocation } = req.body;
 
             if (!locationId) return res.badRequest({ status: 'error', message: 'L\'identifiant de la location est requis.' });
 
-            const location = await LocationService.update(locationId, { userId, appartementId, caution, dateStart, dateEnd, status });
+            const location = await LocationService.update(locationId, { userId, appartementId, caution, dateStart, dateEnd, status, typeLocation });
 
             return res.ok({
                 status: 'success',
@@ -126,7 +126,7 @@ module.exports = {
 
     /**
      * Rechercher / lister les locations par critères avec pagination.
-     * Query params supportés: page, limit, user, appartement, status, dateStart, dateEnd
+     * Query params supportés: page, limit, user, appartement, status, dateStart, dateEnd, typeLocation
      * Exemple: `?page=1&limit=20&user=123&status=active`
      */
     find: async (req, res) => {
@@ -134,9 +134,9 @@ module.exports = {
             const page = parseInt(req.query.page, 10) || 1;
             const limit = parseInt(req.query.limit, 10) || 10;
 
-            const { user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd } = req.query;
+            const { user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, typeLocation } = req.query;
 
-            const locations = await LocationService.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit);
+            const locations = await LocationService.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
             return res.ok({
                 status: 'success',
                 message: 'Locations récupérées avec succès.',

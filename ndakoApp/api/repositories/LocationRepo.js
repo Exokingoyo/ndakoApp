@@ -41,7 +41,7 @@ module.exports = {
     //     }
     // },
 
-    findByCriteria: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit) {
+    findByCriteria: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation) {
         try {
 
             const whereClause = {
@@ -49,6 +49,7 @@ module.exports = {
                     {
                         ...(user ? { user } : {}),
                         ...(status ? { status } : {}),
+                        ...(typeLocation ? { typeLocation } : {}),
 
                         ...(loyerMin || loyerMax ? {
                             loyer: {

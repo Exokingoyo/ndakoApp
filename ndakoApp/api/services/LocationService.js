@@ -36,10 +36,12 @@ module.exports = {
                 throw ({ message: 'l\'appartement n\'est pas disponible.' });
             }
 
-            sails.log("appart", appartement)
+            let tableau = appartement.typeLocation;
+            let chaine = data.typeLocation;
 
-            return
-
+            if (!tableau.includes(chaine)) {
+                throw ({ message: 'Pour cette appartement le type de contrat  disponible est : ' + tableau.join(', ') + '.' });
+            }
 
             if (!data.userId) {
                 throw ({ message: 'L\'utilisateur est requis.' });
@@ -65,7 +67,10 @@ module.exports = {
 
             const locationData = {
                 caution: data.caution,
-                loyer: appartement.loyer,
+                typeLocation: data.typeLocation,
+                priceMonthly: appartement.loyer,
+                priceDaily: appartement.loyer / 30,
+                priceHourly: appartement.loyer / 720,
                 user: data.userId,
                 appartement: data.appartementId,
                 dateStart: data.dateStart || new Date(),
@@ -109,9 +114,19 @@ module.exports = {
             //     throw ({ message: 'l\'utilisateur doit être un locataire.' });
             // }
 
+            let tableau = appartement.typeLocation;
+            let chaine = data.typeLocation;
+
+            if (!tableau.includes(chaine)) {
+                throw ({ message: 'Pour cette appartement le type de contrat  disponible est : ' + tableau.join(', ') + '.' });
+            }
+
             const locationData = {
                 caution: data.caution || locationId.caution,
-                loyer: appartement.loyer,
+                typeLocation: data.typeLocation,
+                priceMonthly: appartement.loyer,
+                priceDaily: appartement.loyer / 30,
+                priceHourly: appartement.loyer / 720,
                 user: data.userId,
                 appartement: data.appartementId,
                 dateStart: data.dateStart,
@@ -133,9 +148,9 @@ module.exports = {
         }
     },
 
-    findByCriteria: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit) {
+    findByCriteria: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation) {
         try {
-            return await LocationRepo.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit);
+            return await LocationRepo.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
         } catch (error) {
             throw error;
         }
