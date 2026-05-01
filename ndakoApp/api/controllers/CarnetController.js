@@ -10,9 +10,9 @@ module.exports = {
 
     create: async function (req, res) {
         try {
-            const { mois, year, montant, loyer, date_payement, date_echeance, reste, status, proprietaireId, locateurId, locationId } = req.body;
+            const { mois, year, montant, loyer, datePayement, dateECheance, reste, status, proprietaireId, locateurId, locationId } = req.body;
 
-            const carnet = await CarnetService.create({ mois, year, montant, loyer, date_payement, date_echeance, reste, status, proprietaireId, locateurId, locationId });
+            const carnet = await CarnetService.create({ mois, year, montant, loyer, datePayement, dateECheance, reste, status, proprietaireId, locateurId, locationId });
 
             return res.ok({ status: 'success', message: 'Carnet créé', carnet });
         } catch (error) {

@@ -27,11 +27,11 @@ module.exports = {
             // if (!locateur) throw ({ message: 'Le locateur n\'existe pas.' });
 
             const carnetData = {
-                date_Start: new Date(),
+                dateStart: new Date(),
                 montant: data.montant || 0,
                 loyer: appartement.loyer,
-                date_payement: data.date_payement,
-                date_echeance: data.date_echeance,
+                datePayement: data.datePayement,
+                dateECheance: data.dateECheance,
                 reste: data.reste || 0,
                 status: data.status || 'unpaid',
                 proprietaire: immeuble.user,

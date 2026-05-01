@@ -9,17 +9,15 @@ module.exports = {
 
   attributes: {
 
-    date_Start: {
-      type: 'ref',
+    dateStart: {
+      type: 'string',
       required: true,
-      columnType: 'date',
       description: 'date du debut du carnet'
     },
 
-    date_End: {
-      type: 'ref',
+    dateEnd: {
+      type: 'string',
       required: true,
-      columnType: 'date',
       description: 'date du fin du carnet'
     },
 
@@ -35,17 +33,15 @@ module.exports = {
       description: 'Montant du loyer '
     },
 
-    date_payement: {
-      type: 'ref',
-      columnType: 'date',
+    datePayement: {
+      type: 'string',
       allowNull: true,
       description: 'date du payement du loyer'
     },
 
-    date_echeance: {
-      type: 'ref',
+    dateECheance: {
+      type: 'string',
       required: true,
-      columnType: 'date',
       description: 'Date d\'echeance de payement pour le rappel en cas de depassement de cette date le service cron effectue un rapel de non payement et change le statut en non payé '
     },
 
