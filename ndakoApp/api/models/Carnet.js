@@ -9,17 +9,14 @@ module.exports = {
 
   attributes: {
 
-    date_Start: {
-      type: 'ref',
+    dateStart: {
+      type: 'string',
       required: true,
-      columnType: 'date',
-      description: 'date du debut du carnet'
+      description: 'date du debut du carnet (ISO string)'
     },
 
-    date_End: {
-      type: 'ref',
-      required: true,
-      columnType: 'date',
+    dateEnd: {
+      type: 'string',
       description: 'date du fin du carnet'
     },
 
@@ -35,18 +32,27 @@ module.exports = {
       description: 'Montant du loyer '
     },
 
-    date_payement: {
-      type: 'ref',
-      columnType: 'date',
+    datePayement: {
+      type: 'string',
       allowNull: true,
       description: 'date du payement du loyer'
     },
 
-    date_echeance: {
-      type: 'ref',
+    dateECheance: {
+      type: 'string',
       required: true,
-      columnType: 'date',
       description: 'Date d\'echeance de payement pour le rappel en cas de depassement de cette date le service cron effectue un rapel de non payement et change le statut en non payé '
+    },
+
+    // Ajouté: mois et year pour pouvoir filtrer/ordonner les carnets par période
+    mois: {
+      type: 'number',
+      description: 'Mois du carnet (1-12)'
+    },
+
+    year: {
+      type: 'number',
+      description: 'Année du carnet'
     },
 
     reste: {
@@ -61,7 +67,7 @@ module.exports = {
       description: 'Status du payement '
     },
 
-    proprietaire: {
+    bailleur: {
       model: 'user',
       required: true,
       description: 'Le bailleur '
@@ -78,6 +84,11 @@ module.exports = {
       required: true,
       description: 'Le contrat qui conserne le carnet'
     },
+
+    payements: {
+      collection: 'payement',
+      via: 'carnet'
+    }
 
   },
 

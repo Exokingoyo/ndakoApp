@@ -91,7 +91,7 @@ module.exports = {
                 skip: (page - 1) * limit,
                 limit
 
-            }).populate('user').populate('appartement').sort('createdAt DESC');
+            }).populate('locateur').populate('bailleur').populate('appartement').sort('createdAt DESC');
 
             return {
                 locations,
@@ -106,7 +106,7 @@ module.exports = {
     
     findById: async function (id) {
         try {
-            return await Location.findOne(id).populate('user').populate('appartement');
+            return await Location.findOne(id).populate('locateur').populate('bailleur').populate('appartement');
         } catch (error) {
             throw error;
         }
