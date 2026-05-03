@@ -6,8 +6,69 @@ const NotificationService = require("./NotificationService");
 
 module.exports = {
 
-    create: async function (data) {
+    /**
+   * Create a facture (invoice).
+   * - Validate required fields
+   * - Avoid duplicate for same location/mois/year
+   * - Compute defaults: numero, dateEmission, dateEcheance, reste
+   */
+    create: async function ({ locationId, montant, dateStart }) {
+        try {
+            // 1. Validation de base
+            if (!locationId) throw { message: 'locationId est requis.' };
+            if (typeof montant === 'undefined' || isNaN(Number(montant))) {
+                throw { message: 'montant invalide.' };
+            }
 
+            // 2. Vérification de l'existence de la location
+            const location = await LocationRepo.findById(locationId);
+            if (!location) throw { message: 'Location introuvable.' };
+
+            // 3. Traitement des dates
+            const dateDebut = dateStart ? new Date(dateStart) : new Date();
+            const mois = dateDebut.getMonth(); // 0-11
+            const year = dateDebut.getFullYear(); // année corrigée
+
+            // 4. Vérification des doublons pour la période
+            const exists = await CarnetRepo.findByLocationAndPeriod(locationId, mois, year);
+            if (exists) throw { message: 'Un carnet existe déjà pour cette période.' };
+
+            // 5. Calcul de la date d'échéance (fin du mois par défaut)
+            // Dernier jour du mois de dateStart
+            const lastDay = new Date(year, mois + 1, 0);
+            finalEcheance = lastDay.toISOString();
+
+            // 6. Préparation des données
+            const carnetData = {
+                dateStart: dateDebut.toISOString(),
+                loyer: Math.ceil(Number(montant)),
+                montant: 0,
+                reste: Math.ceil(Number(montant)),
+                dateECheance: finalEcheance,
+                status: 'unpaid',
+                bailleur: location.bailleur.id,
+                locateur: location.locateur.id,
+                location: locationId,
+                mois: mois + 1,
+                year: year,
+            };
+
+            // 7. Création
+            const carnet = await CarnetRepo.create(carnetData);
+
+            // 8. Notifications (avec gestion d'erreur optionnelle pour ne pas bloquer la création)
+            try {
+                await NotificationService.notify(carnet.bailleur, `Nouveau carnet ${carnet.numero}`, 'info', 'carnet', carnet.id, `/carnets/${carnet.id}`);
+                await NotificationService.notify(carnet.locateur, `Nouveau carnet ${carnet.numero}`, 'info', 'carnet', carnet.id, `/carnets/${carnet.id}`);
+            } catch (notifError) {
+                console.error("Erreur notification:", notifError);
+            }
+
+            return carnet;
+        } catch (error) {
+            // Il est préférable de logger l'erreur ici pour le debug
+            throw error;
+        }
     },
 
     update: async function (id, data) {
@@ -233,7 +294,7 @@ module.exports = {
                 if (i === 0) {
                     const joursOccupes = lastDayOfMonth - day + 1;
                     loyerFinal = (loyerMensuel / lastDayOfMonth) * joursOccupes;
-                    loyerFinal = Math.round(loyerFinal);
+                    loyerFinal = Math.ceil(loyerFinal);
                     resteFinal = loyerFinal;
                 }
 

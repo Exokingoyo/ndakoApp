@@ -8,6 +8,16 @@ const CarnetService = require("../services/CarnetService");
 
 module.exports = {
 
+    create: async function (req, res) {
+        try {
+            const { locationId, montant, bailleurId, locateurId, dateStart } = req.body;
+            const carnet = await CarnetService.create({ locationId, montant, bailleurId, locateurId, dateStart });
+            return res.ok({ status: 'success', message: 'Carnet créé', carnet });
+        } catch (error) {
+            return res.serverError(error);
+        }
+    },
+
     update: async function (req, res) {
         try {
             const id = req.params.id || req.body.carnetId;
@@ -92,6 +102,7 @@ module.exports = {
     // POST /api/v1/carnets/:id/payment  body: { amount, paymentDate }
     addPayment: async function (req, res) {
         try {
+            // ajouter payementId du payement pour l'historique des payements et les reçus et confirmations de payement a faire sur payement 
             const carnetId = req.params.id || req.body.carnetId;
             const { montant, paymentDate } = req.body;
 

@@ -71,8 +71,8 @@ module.exports = {
                 caution: data.caution,
                 typeLocation: data.typeLocation,
                 priceMonthly: appartement.loyer,
-                priceDaily: appartement.loyer / 30,
-                priceHourly: appartement.loyer / 720,
+                priceDaily: Math.ceil(appartement.loyer / 30),
+                priceHourly: Math.ceil(appartement.loyer / 720),
                 locateur: data.userId,
                 bailleur: appartement.immeuble.user,
                 appartement: data.appartementId,
@@ -111,8 +111,19 @@ module.exports = {
                 );
             }
 
-            if (data.typeLocation == "mensuel") {
-                const carnet = await CarnetService.generateCarnets({ dateStart: location.dateStart, locationId: location.id, montant: location.priceMonthly });
+            switch (data.typeLocation) {
+                case 'mensuel':
+                    await CarnetService.generateCarnets({ dateStart: location.dateStart, locationId: location.id, montant: location.priceMonthly });
+                    break;
+                case 'journalier':
+                    await CarnetService.create({ dateStart: location.dateStart, locationId: location.id, montant: location.priceDaily });
+                    break;
+                case 'horaire':
+                    await CarnetService.create({ dateStart: location.dateStart, locationId: location.id, montant: location.priceHourly });
+                    break;
+                default:
+                    throw ({ message: 'Type de location invalide.' });
+                    break;
             }
 
             return location;

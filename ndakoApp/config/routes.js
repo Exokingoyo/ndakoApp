@@ -63,7 +63,7 @@ module.exports.routes = {
   // Carnet
 
   // création d'un carnet unique
-  // 'POST /api/v1/carnets': { controller: 'CarnetController', action: 'create' },
+  'POST /api/v1/carnets': { controller: 'CarnetController', action: 'create' },
   // ajouter N carnets (mois) pour une location
   'POST /api/v1/carnets/add': { controller: 'CarnetController', action: 'addCarnet' },
   // ajouter un paiement à un carnet
