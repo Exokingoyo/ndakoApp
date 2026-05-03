@@ -47,4 +47,56 @@ module.exports = {
         }
     }
 
+        ,
+        update: async function (id, data) {
+            try {
+                return await Message.updateOne(id).set(data);
+            } catch (error) {
+                throw error;
+            }
+        },
+
+        delete: async function (id) {
+            try {
+                return await Message.destroy({ id: id }).fetch();
+            } catch (error) {
+                throw error;
+            }
+        },
+
+        countUnreadForUser: async function (userId) {
+            try {
+                return await Message.count({ receiver: userId, read_at: null });
+            } catch (error) {
+                throw error;
+            }
+        },
+
+        // marque comme lu tous les messages envoyés par otherUser à user
+        markConversationRead: async function (userId, otherUserId) {
+            try {
+                return await Message.update({ sender: otherUserId, receiver: userId, read_at: null }).set({ read_at: new Date().toISOString() }).fetch();
+            } catch (error) {
+                throw error;
+            }
+        },
+
+        findConversationPaginated: async function (user1Id, user2Id, page = 1, limit = 50) {
+            try {
+                const whereClause = {
+                    or: [
+                        { sender: user1Id, receiver: user2Id },
+                        { sender: user2Id, receiver: user1Id }
+                    ]
+                };
+
+                const total = await Message.count(whereClause);
+                const messages = await Message.find({ where: whereClause, skip: (page - 1) * limit, limit, sort: 'createdAt DESC' });
+
+                return { messages, total, page, totalPages: Math.ceil(total / limit) };
+            } catch (error) {
+                throw error;
+            }
+        }
+
 };

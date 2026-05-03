@@ -102,6 +102,13 @@ module.exports.routes = {
   // Messagerie
   'POST /api/v1/message': { controller: 'MessageController', action: 'send' },
   'GET /api/v1/message/:receiverId': { controller: 'MessageController', action: 'getConversation' },
+  // Messagerie - endpoints détaillés
+  'GET /api/v1/message/:receiverId/paginated': { controller: 'MessageController', action: 'getConversationPaginated' },
+  'GET /api/v1/messages': { controller: 'MessageController', action: 'getConversations' },
+  'POST /api/v1/message/mark-read': { controller: 'MessageController', action: 'markConversationRead' },
+  'PUT /api/v1/message/:id': { controller: 'MessageController', action: 'edit' },
+  'DELETE /api/v1/message/:id': { controller: 'MessageController', action: 'remove' },
+  'GET /api/v1/message/unread-count': { controller: 'MessageController', action: 'unreadCount' },
 
   // Notifications
   'GET /api/v1/notification': { controller: 'NotificationController', action: 'getMyNotifications' },
