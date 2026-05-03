@@ -3,6 +3,7 @@ const AppartementRepo = require("../repositories/AppartementRepo");
 const UserRepo = require("../repositories/UserRepo");
 const ImmeubleRepo = require("../repositories/ImmeubleRepo");
 const NotificationService = require("./NotificationService");
+const CarnetService = require("./CarnetService");
 
 module.exports = {
 
@@ -110,6 +111,10 @@ module.exports = {
                 );
             }
 
+            if (data.typeLocation == "mensuel") {
+                const carnet = await CarnetService.generateCarnets({ dateStart: location.dateStart, locationId: location.id, montant: location.priceMonthly });
+            }
+
             return location;
         } catch (error) {
             throw error;
@@ -152,7 +157,7 @@ module.exports = {
 
             const locationData = {
                 caution: data.caution || locationId.caution,
-               typeLocation: data.typeLocation,
+                typeLocation: data.typeLocation,
                 priceMonthly: appartement.loyer,
                 priceDaily: appartement.loyer / 30,
                 priceHourly: appartement.loyer / 720,

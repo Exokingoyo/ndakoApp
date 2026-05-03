@@ -48,7 +48,7 @@ module.exports.routes = {
   // Location
   'POST /api/v1/locations': { controller: 'LocationController', action: 'create' },
   'PUT /api/v1/locations': { controller: 'LocationController', action: 'update' },
-  'GET /api/v1/me/locations': { controller: 'LocationController', action: 'getMylocation' },
+  'GET /api/v1/locations/me': { controller: 'LocationController', action: 'getMylocation' },
   'GET /api/v1/locations/:id': { controller: 'LocationController', action: 'getById' },
   'GET /api/v1/locations': { controller: 'LocationController', action: 'find' },
   'PUT /api/v1/locations/:id/status': { controller: 'LocationController', action: 'changeStatus' },
@@ -59,6 +59,25 @@ module.exports.routes = {
   'GET /api/v1/appartements': { controller: 'AppartementController', action: 'getAllAppartements' },
   'GET /api/v1/me/appartements': { controller: 'AppartementController', action: 'getMyAppartements' },
   'GET /api/v1/appartements/:immeubleId': { controller: 'AppartementController', action: 'getByImmeuble' },
+
+  // Carnet
+
+  // création d'un carnet unique
+  // 'POST /api/v1/carnets': { controller: 'CarnetController', action: 'create' },
+  // ajouter N carnets (mois) pour une location
+  'POST /api/v1/carnets/add': { controller: 'CarnetController', action: 'addCarnet' },
+  // ajouter un paiement à un carnet
+  'POST /api/v1/carnets/:carnetId/payment': { controller: 'CarnetController', action: 'addPayment' },
+  // marquer un carnet comme payé
+  'POST /api/v1/carnets/:carnetId/mark-paid': { controller: 'CarnetController', action: 'markAsPaid' },
+  // récupérer les carnets pour l'utilisateur connecté (paging)
+  'GET /api/v1/carnets/me': { controller: 'CarnetController', action: 'getAll' },
+  // récupérer les carnets par location
+  'GET /api/v1/carnets/:locationId': { controller: 'CarnetController', action: 'getByLocation' },
+  // carnets en retard
+  'GET /api/v1/carnets/overdue': { controller: 'CarnetController', action: 'getOverdue' },
+  // prochain carnet dû pour une location
+  'GET /api/v1/carnets/:locationId/next': { controller: 'CarnetController', action: 'getNextDue' },
 
 
   // Rechercher
@@ -76,7 +95,7 @@ module.exports.routes = {
   // 'POST /api/v1/incident/:id/comment': { controller: 'IncidentController', action: 'comment' },
   'PATCH /api/v1/incident/:id/escalate': { controller: 'IncidentController', action: 'escalate' },
   'GET /api/v1/incident/stats': { controller: 'IncidentController', action: 'stats' },
-  'GET /api/v1/incident/immeuble/:immeubleId': { controller: 'IncidentController', action: 'byImmeuble' },
+  'GET /api/v1/incident/:immeubleId': { controller: 'IncidentController', action: 'byImmeuble' },
   'GET /api/v1/incident/priority/high': { controller: 'IncidentController', action: 'highPriority' },
   'GET /api/v1/incident/active': { controller: 'IncidentController', action: 'active' },
 

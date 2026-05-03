@@ -48,6 +48,12 @@ module.exports = {
       description: 'Utilisateur effectuant le payement'
     },
 
+    carnet: {
+      model: 'carnet',
+      // required: true
+      description: 'Le carnet auquel le payement est rattaché'
+    },
+
     location: {
       model: 'location',
       required: true,

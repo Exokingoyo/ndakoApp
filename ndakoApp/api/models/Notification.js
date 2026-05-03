@@ -36,7 +36,7 @@ module.exports = {
     // Permet de relier une notification à son contexte métier (incident, location, etc.)
     sourceType: {
       type: 'string',
-      isIn: ['incident', 'location', 'payment', 'review', 'message', 'system'],
+      isIn: ['incident', 'location', 'payment', 'review', 'message', 'system', 'carnet'],
       description: 'Type de source: incident, location, paiement, etc.'
     },
 
