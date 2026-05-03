@@ -66,12 +66,13 @@ module.exports = {
 
     getMylocation: async (req, res) => {
         try {
-            const { status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, typeLocation } = req.query;
+            const { bailleur, locateur, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, typeLocation } = req.query;
             const page = parseInt(req.query.page, 10) || 1;
             const limit = parseInt(req.query.limit, 10) || 10;
+            
+            const userId = req.session?.user?.id || req.body.user?.id || null;
 
-            const user = req.session?.user?.id ? req.body.user?.id : null;
-            const locations = await LocationService.getMylocation(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
+            const locations = await LocationService.getMylocation(userId, bailleur, locateur, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
 
             return res.ok({
                 status: 'success',
@@ -159,9 +160,11 @@ module.exports = {
             const page = parseInt(req.query.page, 10) || 1;
             const limit = parseInt(req.query.limit, 10) || 10;
 
-            const { user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, typeLocation } = req.query;
+            const { status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, typeLocation } = req.query;
 
-            const locations = await LocationService.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
+            const userId = req.session?.user?.id || req.body.user?.id || null;
+
+            const locations = await LocationService.findByCriteria(bailleur, locateur, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
             return res.ok({
                 status: 'success',
                 message: 'Locations récupérées avec succès.',

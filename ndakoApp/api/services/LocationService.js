@@ -4,6 +4,7 @@ const UserRepo = require("../repositories/UserRepo");
 const ImmeubleRepo = require("../repositories/ImmeubleRepo");
 const NotificationService = require("./NotificationService");
 const CarnetService = require("./CarnetService");
+const Sails = require("sails/lib/app/Sails");
 
 module.exports = {
 
@@ -18,54 +19,33 @@ module.exports = {
     create: async function (data) {
         try {
 
-            if (!data.appartementId) {
-                throw ({ message: 'L\'appartement est requis.' });
-            }
-
-            if (!data.typeLocation) {
-                throw ({ message: 'Le type de contrat est requis. ' });
-            }
+            if (!data.appartementId) throw ({ message: 'L\'appartement est requis.' });
+            if (!data.typeLocation) throw ({ message: 'Le type de contrat est requis. ' });
 
             const appartement = await AppartementRepo.findById(data.appartementId);
 
-            if (!appartement) {
-                throw ({ message: 'l\'appartement n\'exite pas.' });
-            }
-            if (appartement.status !== 'active') {
-                throw ({ message: 'l\'appartement n\'est pas active.' });
-            }
-            if (appartement.is_vacant !== true) {
-                throw ({ message: 'l\'appartement n\'est pas disponible.' });
-            }
+            if (!appartement) throw ({ message: 'l\'appartement n\'exite pas.' });
+
+            if (appartement.status !== 'active') throw ({ message: 'l\'appartement n\'est pas active.' });
+            if (appartement.is_vacant !== true) throw ({ message: 'l\'appartement n\'est pas disponible.' });
 
             let tableau = appartement.typeLocation;
             let chaine = data.typeLocation;
 
-            if (!tableau.includes(chaine)) {
-                throw ({ message: 'Pour cette appartement le type de contrat  disponible est : ' + tableau.join(', ') + '.' });
-            }
+            if (!tableau.includes(chaine)) throw ({ message: 'Pour cette appartement le type de contrat  disponible est : ' + tableau.join(', ') + '.' });
 
-            if (!data.userId) {
-                throw ({ message: 'L\'utilisateur est requis.' });
-            }
+            if (!data.userId) throw ({ message: 'L\'utilisateur est requis.' });
+
             const user = await UserRepo.findById(data.userId);
 
-            if (!user) {
-                throw ({ message: 'l\'utilisateur n\'exite pas.' });
-            }
-            if (user.status !== 'active') {
-                throw ({ message: 'l\'utilisateur n\'est pas active.' });
-            }
-            if (user.is_active !== true) {
-                throw ({ message: 'l\'utilisateur n\'est pas actif.' });
-            }
+            if (!user) throw ({ message: 'l\'utilisateur n\'exite pas.' });
+            if (user.status !== 'active') throw ({ message: 'l\'utilisateur n\'est pas active.' });
+            if (user.is_active !== true) throw ({ message: 'l\'utilisateur n\'est pas actif.' });
             // if (user.role !== 'locataire') {
             //     throw ({ message: 'l\'utilisateur doit être un locataire.' });
             // }
 
-            if (!data.caution) {
-                throw ({ message: 'La caution de l\'appartement est requise.' });
-            }
+            if (!data.caution) throw ({ message: 'La caution de l\'appartement est requise.' });
 
             const locationData = {
                 caution: data.caution,
@@ -80,14 +60,13 @@ module.exports = {
             };
 
             // mettre un syst. de validation au moyen d'un payement avant la creation de location
-
             const location = await LocationRepo.create(locationData);
 
             await AppartementRepo.update(data.appartementId, { is_vacant: false });
 
             // Notifie le locataire que sa location est créée
             await NotificationService.notify(
-                data.userId,
+                location.locateur,
                 `Nouveau contrat de location créé : ${appartement.name} à l'immeuble ${appartement.immeuble.name}`,
                 'success',     // Type: success (création positive)
                 'location',    // Source type
@@ -222,25 +201,59 @@ module.exports = {
         }
     },
 
-    findByCriteria: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation) {
+    findByCriteria: async function (userId, bailleurId, locateurId, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation) {
         try {
-            return await LocationRepo.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
+
+            if (!userId) throw ({ message: 'L\'ID de l\'utilisateur est requis.' });
+
+            const user = await UserRepo.findById(userId);
+
+            if (!user) throw ({ message: 'l\'utilisateur n\'exite pas.' });
+            if (user.status !== 'active') throw ({ message: 'l\'utilisateur n\'est pas active.' });
+            if (user.is_active !== true) throw ({ message: 'l\'utilisateur n\'est pas actif.' });
+
+            let locateur = null;
+            let bailleur = null;
+
+            if (user.role === 'proprietaire') {
+                bailleur = user.id;
+                locateur = locateurId || null;
+            } else if (user.role === 'locateur') {
+                locateur = user.id;
+                bailleur = bailleurId || null;
+            } else {
+                throw ({ message: 'Rôle utilisateur invalide pour la recherche de location.' });
+            }
+
+
+            return await LocationRepo.findByCriteria(bailleur, locateur, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
         } catch (error) {
             throw error;
         }
     },
 
-    getMylocation: async function (user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation) {
+    getMylocation: async function (userId, bailleurId, locateurId, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation) {
         try {
-            const userVerifier = await UserRepo.findById(user);
+            if (!userId) throw ({ message: 'L\'ID de l\'utilisateur est requis.' });
 
-            if (!userVerifier) throw ({ message: 'l\'utilisateur n\'exite pas.' });
+            const user = await UserRepo.findById(userId);
 
-            if (userVerifier.status !== 'active') throw ({ message: 'l\'utilisateur n\'est pas active.' });
+            if (!user) throw ({ message: 'l\'utilisateur n\'exite pas.' });
+            if (user.status !== 'active') throw ({ message: 'l\'utilisateur n\'est pas active.' });
 
-            if (userVerifier.is_active !== true) throw ({ message: 'l\'utilisateur n\'est pas actif.' });
+            let locateur = null;
+            let bailleur = null;
+            if (user.role === 'proprietaire') {
+                bailleur = user.id;
+                locateur = locateurId || null;
+            } else if (user.role === 'locateur') {
+                locateur = user.id;
+                bailleur = bailleurId || null;
+            } else {
+                throw ({ message: 'Rôle utilisateur invalide pour la recherche de location.' });
+            }
 
-            return await LocationRepo.findByCriteria(user, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
+            return await LocationRepo.findByCriteria(bailleur, locateur, status, loyerMin, loyerMax, cautionMin, cautionMax, dateStart, dateEnd, page, limit, typeLocation);
 
         } catch (error) {
             throw error;
@@ -266,7 +279,7 @@ module.exports = {
             await AppartementRepo.update(location.appartement.id, { is_vacant: true });
 
             await NotificationService.notify(
-                location.user.id,
+                location.bailleur.id,
                 `Le statut de votre contrat de location pour ${location.appartement.name} est maintenant : ${status}.`,
                 'warning',
                 'location',
@@ -274,24 +287,16 @@ module.exports = {
                 `/location/${updatedLocation.id}`
             );
 
-            const appartement = await AppartementRepo.findById(location.appartement.id);
+            await NotificationService.notify(
+                location.locateur.id,
+                `Le statut du contrat de location de ${locataireName || 'ce locataire'} pour l'appartement ${location.appartement.name} est maintenant : ${status}.`,
+                'warning',
+                'location',
+                updatedLocation.id,
+                `/location/${updatedLocation.id}`
+            );
 
-            if (appartement && appartement.immeuble && appartement.immeuble.user) {
-                const proprio = await UserRepo.findById(appartement.immeuble.user);
 
-                if (proprio) {
-                    const locataireName = `${location.user.name || ''} ${location.user.first_name || ''}`.trim();
-
-                    await NotificationService.notify(
-                        proprio.id,
-                        `Le statut du contrat de location de ${locataireName || 'ce locataire'} pour l'appartement ${location.appartement.name} est maintenant : ${status}.`,
-                        'warning',
-                        'location',
-                        updatedLocation.id,
-                        `/location/${updatedLocation.id}`
-                    );
-                }
-            }
 
             return updatedLocation;
 
