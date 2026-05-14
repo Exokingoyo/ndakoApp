@@ -123,8 +123,18 @@ module.exports.routes = {
   'DELETE /api/v1/notification/:id': { controller: 'NotificationController', action: 'deleteNotification' },
   'DELETE /api/v1/notification/delete-all': { controller: 'NotificationController', action: 'deleteAllNotifications' },
 
+
   // Dashboard
   'GET /api/v1/dashboard': { controller: 'DashboardController', action: 'getStats' },
 
+  // Paiements - Endpoints améliorés
+  'POST /api/v1/payement': { controller: 'PayementController', action: 'create' },
+  'POST /api/v1/payement/carnet/:carnetId': { controller: 'PayementController', action: 'createFromCarnet' },
+  'GET /api/v1/payement': { controller: 'PayementController', action: 'getMyPayements' },
+  'GET /api/v1/payement/carnet/:carnetId': { controller: 'PayementController', action: 'getPaymentHistory' },
+  'POST /api/v1/payement/reconcile/:carnetId': { controller: 'PayementController', action: 'reconcileCarnet' },
+  'PUT /api/v1/payement/:id': { controller: 'PayementController', action: 'update' },
+  'POST /api/v1/payement/:id/refund': { controller: 'PayementController', action: 'refund' },
 
 };
+

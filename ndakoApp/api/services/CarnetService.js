@@ -429,6 +429,105 @@ module.exports = {
         } catch (error) {
             throw error;
         }
+    },
+
+    /**
+     * Calculer un résumé des paiements d'un carnet
+     * @param {String} carnetId - ID du carnet
+     */
+    calculatePaymentSummary: async function (carnetId) {
+        try {
+            if (!carnetId) {
+                throw { message: 'ID carnet requis.' };
+            }
+
+            const carnet = await CarnetRepo.findById(carnetId);
+            if (!carnet) {
+                throw { message: 'Carnet introuvable.' };
+            }
+
+            // Récupérer tous les paiements associés
+            const PayementRepo = require('../repositories/PayementRepo');
+            const payements = await PayementRepo.findByCarnet(carnetId);
+
+            // Calculer les totaux
+            const completedPayments = payements.filter(p => p.status === 'completed');
+            const pendingPayments = payements.filter(p => p.status === 'pending');
+            const failedPayments = payements.filter(p => p.status === 'failed');
+            const refundedPayments = payements.filter(p => p.status === 'refunded');
+
+            const totalCompleted = completedPayments.reduce((sum, p) => sum + (p.amount || 0), 0);
+            const totalPending = pendingPayments.reduce((sum, p) => sum + (p.amount || 0), 0);
+            const totalFailed = failedPayments.reduce((sum, p) => sum + (p.amount || 0), 0);
+            const totalRefunded = refundedPayments.reduce((sum, p) => sum + (p.refundedAmount || 0), 0);
+
+            const loyerAmount = carnet.loyer || 0;
+            const remaining = Math.max(0, loyerAmount - totalCompleted + totalRefunded);
+
+            return {
+                carnetId: carnetId,
+                mois: carnet.mois,
+                year: carnet.year,
+                loyerAmount: loyerAmount,
+                totalCompleted: totalCompleted,
+                totalPending: totalPending,
+                totalFailed: totalFailed,
+                totalRefunded: totalRefunded,
+                remaining: remaining,
+                status: carnet.status,
+                paymentCount: {
+                    completed: completedPayments.length,
+                    pending: pendingPayments.length,
+                    failed: failedPayments.length,
+                    refunded: refundedPayments.length,
+                    total: payements.length
+                },
+                isFullyPaid: remaining === 0,
+                percentagePaid: loyerAmount > 0 ? Math.round((totalCompleted / loyerAmount) * 100) : 0
+            };
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    /**
+     * Obtenir les détails complets d'un carnet avec tous ses paiements
+     * @param {String} carnetId - ID du carnet
+     */
+    getPaymentDetails: async function (carnetId) {
+        try {
+            if (!carnetId) {
+                throw { message: 'ID carnet requis.' };
+            }
+
+            const carnet = await CarnetRepo.findById(carnetId);
+            if (!carnet) {
+                throw { message: 'Carnet introuvable.' };
+            }
+
+            // Récupérer le résumé des paiements
+            const summary = await this.calculatePaymentSummary(carnetId);
+
+            // Récupérer tous les paiements
+            const PayementRepo = require('../repositories/PayementRepo');
+            const payements = await PayementRepo.findByCarnet(carnetId);
+
+            return {
+                carnet: carnet,
+                summary: summary,
+                payements: payements,
+                details: {
+                    createdAt: carnet.createdAt,
+                    updatedAt: carnet.updatedAt,
+                    dateStart: carnet.dateStart,
+                    dateEnd: carnet.dateEnd,
+                    dateECheance: carnet.dateECheance,
+                    datePayement: carnet.datePayement,
+                }
+            };
+        } catch (error) {
+            throw error;
+        }
     }
 
 };

@@ -18,6 +18,7 @@ module.exports = {
     amount: {
       type: 'number',
       required: true,
+      columnType: 'decimal(10,2)',
       description: 'Montant payé'
     },
 
@@ -37,7 +38,7 @@ module.exports = {
 
     status: {
       type: 'string',
-      isIn: ['pending', 'completed', 'failed'],
+      isIn: ['pending', 'completed', 'failed', 'refunded'],
       defaultsTo: 'pending',
       description: 'Statut du paiement'
     },
@@ -50,16 +51,47 @@ module.exports = {
 
     carnet: {
       model: 'carnet',
-      // required: true
       description: 'Le carnet auquel le payement est rattaché'
     },
 
     location: {
       model: 'location',
       required: true,
-      description: 'Le contrat que l\'utiliqateur paye'
+      description: 'Le contrat que l\'utilisateur paye'
     },
 
+    reference: {
+      type: 'string',
+      unique: true,
+      allowNull: true,
+      description: 'Numéro de reçu/confirmation unique'
+    },
+
+    description: {
+      type: 'string',
+      columnType: 'text',
+      allowNull: true,
+      description: 'Notes ou détails supplémentaires du paiement'
+    },
+
+    refundedAmount: {
+      type: 'number',
+      columnType: 'decimal(10,2)',
+      defaultsTo: 0,
+      description: 'Montant remboursé (si applicable)'
+    },
+
+    refundReason: {
+      type: 'string',
+      allowNull: true,
+      description: 'Raison du remboursement'
+    },
+
+    refundDate: {
+      type: 'string',
+      allowNull: true,
+      description: 'Date du remboursement'
+    },
 
   },
 
